@@ -3,7 +3,6 @@
 #+tags[]: vite, javascript
 #+date: 2024-06-06T15:44:07
 #+remote: https://github.com/wschenk/nodepadjs
-#+draft: true
 
 I found this cool little project called [[https://notepadtab.com/][notepadtab.com]] that lets you
 enter text into a box, and it will encode it in the url, which you can
@@ -67,7 +66,8 @@ the minimized version of pako]]. Still, small and fun.
         </sl-textarea>
 
         <p>
-          Reimplementing <a href="https://notepadtab.com/">notepadtab</a> for fun.
+          Reimplementing <a href="https://notepadtab.com/">notepadtab</a> for fun.  This code is at
+          <a href="https://github.com/wschenk/nodepadjs/">https://github.com/wschenk/nodepadjs/</a>.
         </p>
       </div>
     </body>
@@ -112,6 +112,9 @@ the minimized version of pako]]. Still, small and fun.
   })
 #+end_src
 
+Update the =base= if you are deploying it somewhere else, I'm using
+github pages without a domain so it's in a subdirectory.
+
 #+begin_src javascript :tangle vite.config.js
   // vite.config.js
   import { defineConfig } from 'vite';
@@ -154,7 +157,6 @@ the minimized version of pako]]. Still, small and fun.
 
 #+begin_src bash
   mkdir -p .github/workflows
-
 #+end_src
 
 #+begin_src yaml :tangle .github/workflows/deploy.yml
@@ -210,7 +212,10 @@ the minimized version of pako]]. Still, small and fun.
 
 #+end_src
 
+* Check it out
 
+[[https://wschenk.github.io/nodepadjs/#VGhpcyBpcyBteSBzZWNyZXQgbWVzc2FnZSB0byB5b3UuCgpDaGVjayBpdCBvdXQhCg==][Deployed here.]]  It takes forever because the vite build includes all
+of the icons for shoelace...
 
 * References
 
