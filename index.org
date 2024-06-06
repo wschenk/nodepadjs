@@ -1,0 +1,158 @@
+#+title: Recreating notepadtab
+#+subtitle: how small can we go?
+#+tags[]: vite, javascript
+#+date: 2024-06-06T15:44:07
+#+remote: https://github.com/wschenk/nodepadjs
+#+draft: true
+
+I found this cool little project called [[https://notepadtab.com/][notepadtab.com]] that lets you
+enter text into a box, and it will encode it in the url, which you can
+then bookmark, or share around, or whatever.  Put it through a url
+shortener or what have you and the next is available to see anywhere.
+
+I wanted to see how it worked by implementing it myself.  This code is
+much smaller than what is at [[https://github.com/revolter/notepadtab.com][revolter/notepadtab.com]], though it
+doesn't do the zlib compression because there was an [[https://github.com/nodeca/pako/issues/260][issue with using
+the minimized version of pako]]. Still, small and fun.
+
+* Important code
+
+#+begin_src javascript :tangle main.js
+  // main.js
+  import '@unocss/reset/tailwind.css';
+  import './main.css';
+  import '@shoelace-style/shoelace/dist/themes/light.css';
+  import '@shoelace-style/shoelace/dist/shoelace.js';
+
+  window.addEventListener("load", (event) => {
+      const box = document.getElementById( "note-area" )
+      const copy = document.getElementById( "copy" );
+      copy.value = window.location;
+      
+      const hash = window.location.hash
+      if( hash != '' ) {
+          // Restore the value
+          const smaller = window.atob( hash.substring( 1 ) )
+          box.value = smaller;
+      }
+
+      box.addEventListener( "sl-input", (event) => {
+          // Update the url on change
+          const hash = window.btoa( box.value )
+          window.location.hash = '#' + hash
+          copy.value = window.location
+      });
+  });
+#+end_src
+
+=index.html=:
+#+begin_src html :tangle index.html
+  <html>
+    <head>
+      <title>Notepade</title>
+      <script src="main.js" type="module"></script>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body >
+      <div max-w-prose mx-auto prose>
+        <h1 font-header text-2xl font-bold>All your note data in the url</h1>
+
+        <sl-copy-button float-right id="copy"></sl-copy-button>
+
+        <sl-textarea
+          id="note-area"
+          label="Secret note"
+          resize="auto"
+          help-text="Nothing stored on the server, just a big url">
+        </sl-textarea>
+
+        <p>
+          Reimplementing <a href="https://notepadtab.com/">notepadtab</a> for fun.
+        </p>
+      </div>
+    </body>
+  </html>
+
+#+end_src
+
+* Boilerplate junk
+
+=package.json=:
+#+begin_src javascript :tangle package.json
+  {
+      "type": "module",
+      "scripts": {
+          "dev": "unocss \"**/*.html\" -o main.css --watch & vite",
+          "build": "unocss \"**/*.html\" -o main.css && vite build"
+      },
+      "dependencies": {
+          "@shoelace-style/shoelace": "^2.15.1",
+          "unocss": "^0.60.4",
+          "vite": "^5.2.12",
+          "vite-plugin-static-copy": "^1.0.5"
+      }
+  }
+#+end_src
+
+#+begin_src javascript :tangle uno.config.js
+  // uno.config.ts
+  import {
+      defineConfig,
+      presetAttributify,
+      presetTypography,
+      presetUno
+  } from 'unocss'
+
+  export default defineConfig({
+    presets: [
+        presetAttributify(), // required when using attributify mode
+        presetUno(), // required
+        presetTypography(),
+    ],
+  })
+#+end_src
+
+#+begin_src javascript :tangle vite.config.js
+  // vite.config.js
+  import { defineConfig } from 'vite';
+  import { viteStaticCopy } from 'vite-plugin-static-copy';
+
+  const iconsPath = 'node_modules/@shoelace-style/shoelace/dist/assets/icons';
+
+  // https://vitejs.dev/config/
+  export default defineConfig({
+      resolve: {
+          alias: [
+              {
+                  find: /\/assets\/icons\/(.+)/,
+                  replacement: `${iconsPath}/$1`,
+              },
+          ],
+      },
+      build: {
+          rollupOptions: {
+              // external: /^lit/,
+              plugins: [],
+          },
+      },
+      plugins: [
+          viteStaticCopy({
+              targets: [
+                  {
+                      src: iconsPath,
+                      dest: 'assets',
+                  },
+              ],
+          }),
+      ],
+  });
+
+#+end_src
+
+
+
+
+* References
+# Local Variables:
+# eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t)
+# End:
