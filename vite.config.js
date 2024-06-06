@@ -6,6 +6,7 @@ const iconsPath = 'node_modules/@shoelace-style/shoelace/dist/assets/icons';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    base: '/nodepadjs/', // Or / if you arent using github pages
     resolve: {
         alias: [
             {
