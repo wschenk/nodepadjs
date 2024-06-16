@@ -39,6 +39,7 @@ window.addEventListener("load", (event) => {
     }
 
     qrcode.value = window.location.href
+    qrcode.size = 256;
     
     box.addEventListener( "sl-input", (event) => {
         // Update the url on change
