@@ -8,6 +8,7 @@
 [float-right=""]{float:right;}
 .mx-auto,
 [mx-auto=""]{margin-left:auto;margin-right:auto;}
+[size~="\32 56"]{width:64rem;height:64rem;}
 .max-w-prose,
 [max-w-prose=""]{max-width:65ch;}
 [px-2=""]{padding-left:0.5rem;padding-right:0.5rem;}
