@@ -14,14 +14,22 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
+
       - name: Setup Node
         uses: actions/setup-node@v3
+        with:
+          cache: 'npm'
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: npm i
 
       - name: Build project
         run: npm run build
+        env:
+          BASE_DIR: ${{ steps.pages.outputs.base_path }}
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v3

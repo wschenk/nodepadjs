@@ -7,6 +7,10 @@ import '@shoelace-style/shoelace/dist/components/textarea/textarea.js';
 import '@shoelace-style/shoelace/dist/components/qr-code/qr-code.js';
 import pako from 'pako';
 
+import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
+
+setBasePath('https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/');
+
 function deflateToBase64( inputData ) {
     const compressed = pako.deflate( inputData );
     const base64 = window.btoa( String.fromCharCode.apply(null, compressed ));
